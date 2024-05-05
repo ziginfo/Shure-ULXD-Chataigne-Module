@@ -1,8 +1,12 @@
 // =========== VARS ===========================
+var flashtime = 2.5; //time the flashing indicator stays lit
+var device_flashtime = 0;
 var channel_1_flashtime = 0;
+var channel_2_flashtime = 0;
+var channel_3_flashtime = 0;
+var channel_4_flashtime = 0;
 var todo = false;
 var string= "" ;
-var ch = 0 ;
 var contain = {
 	"flash"	:	["Flash", "b", "FLASH"],
 	"name"	:	["Chan Name", "s", "CHAN_NAME"],
@@ -35,7 +39,7 @@ function init() {
   		script.setUpdateRate(1);
   		getAll();
   
-//------------------ Insert Parameters ------------------------
+//=========== Insert Parameters ====================
   	reset = local.parameters.addTrigger("Reset" , "Reset Update Rate Values" , false);
   	rCh1= local.parameters.addEnumParameter("Update Rate Ch 1", "Update Rate Ch 1","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");
 	rCh2= local.parameters.addEnumParameter("Update Rate Ch 2", "Update Rate Ch 2","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");

@@ -18,7 +18,7 @@
     "protocol": "Direct",
     "output": {
       "local": false,
-      "remoteHost" : "",
+      "remoteHost" : "192.168.50.78",
       "remotePort": 2202
     }
   },
@@ -46,7 +46,7 @@
   "commands": {
   
      
-	"send String": {
+	"Send String": {
       "menu": "",
       "callback": "sendLine",
       "parameters": {    
@@ -92,9 +92,7 @@
             "Summing 3&4": "3+4",
             "Summing 1&2 / 3&4": "1+2/3+4",
             "Summing 1&23&4": "1+2+3+4"  }
-        }
-        
-        
+        }   
       }
     },
     "High Density": {
