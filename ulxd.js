@@ -4,35 +4,39 @@ var todo = false;
 var string= "" ;
 var ch = 0 ;
 var contain = {
-	"name"	:	["Chan Name", "s", ""],
-	"trans" : 	["Transmitter", "s",""],
-	"pwrlock" : ["Power Lock", "s",""],
-	"menlock" : ["Menu Lock", "s",""],
-	"gain" : 	["Audio Gain", "s",""],
-	"rfpower" : ["RF Power", "s",""],
-	"frequ" : 	["Frequency", "s",""],
-	"rfgroup" : ["RF Group", "s",""],
+	"flash"	:	["Flash", "b", "FLASH"],
+	"name"	:	["Chan Name", "s", "CHAN_NAME"],
+	"trans" : 	["Transmitter", "s","TX_TYPE"],
+	"pwrlock" : ["Power Lock", "s","TX_PWR_LOCK"],
+	"menlock" : ["Menu Lock", "s","TX_MENU_LOCK"],
+	"gain" : 	["Audio Gain", "s","AUDIO_GAIN"],
+	"rfpower" : ["RF Power", "s","TX_RF_PWR"],
+	"frequ" : 	["Frequency", "s","FREQUENCY"],
+	"rfgroup" : ["RF Group", "s","GROUP_CHAN"],
 	"rfchann" : ["RF Channel", "s",""],
-	"antenna" : ["Antenna", "s",""],
+	"antenna" : ["Antenna", "s","RF_ANTENNA"],
 	"rflvl" : 	["RF", "s", ""],
-	"rfgpeak" : ["RF Level", "f1", ""],
+	"rfgpeak" : ["RF Level", "f1", "RX_RF_LVL"],
 	"audiolvl" : ["Audio Level", "s", ""],
-	"audlvlpk" : ["Audio Peak", "f2", ""],	
-	"encrypt" : ["Encryption Warn", "s", ""],
-	"battcycle" : ["Battery Cycles", "s", ""],
-	"battrun" : ["Battery Runtime", "s", ""],
-	"battype" : ["Battery Type", "s", ""],
-	"battcharge" : ["Battery Charge", "f3", ""]};
+	"audlvlpk" : ["Audio Peak", "f2", "AUDIO_LVL"],	
+	"encrypt" : ["Encryption Warn", "s", "ENCRYPTION_WARNING"],
+	"battcycle" : ["Battery Cycles", "s", "BATT_CYCLE"],
+	"batthealth" : ["Battery Health", "s", "BATT_HEALTH"],
+	"battrun" : ["Battery Runtime", "s", "BATT_RUN_TIME"],
+	"battype" : ["Battery Type", "s", "BATT_TYPE"],
+	"battcharge" : ["Battery Charge", "f3", "BATT_CHARGE"],
+	"battbars" : ["Battery Bars", "en", "BATT_BARS"]};
 
 // =======================================
 //			FUNCTION INIT
 // =======================================
 
 function init() {
-  script.setUpdateRate(1);
-  //request all value fields
-  getAll();
+  		script.setUpdateRate(1);
+  		getAll();
   
+//------------------ Insert Parameters ------------------------
+  	Reset = local.parameters.addTrigger("Reset" , "Reset Update Rate Values" , false);
 // =======================================
 //			CREATE CONTAINERS
 // =======================================
@@ -40,10 +44,11 @@ function init() {
   
 //=============== Device Container ==================
 	var dev = local.values.addContainer("Device");
-		dev.setCollapsed(true);		
+		dev.setCollapsed(true);	
+		dev.addBoolParameter("Flash", "",false);	
 		r=dev.addStringParameter("Model Name", "","");
 		r.setAttribute("readonly" ,true);
-		r=dev.addStringParameter("Device ID", "","");
+		r=dev.addStringParameter("Receiver ID", "","");
 		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("MAC Address", "","");
 		r.setAttribute("readonly" ,true);
@@ -52,6 +57,12 @@ function init() {
 		r=dev.addStringParameter("Lock Status", "","");
 		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("Encryption", "","");
+		r.setAttribute("readonly" ,true);
+		r=dev.addStringParameter("Summing Mode", "","Only for Multi-Ch-Models");
+		r.setAttribute("readonly" ,true);
+		r=dev.addStringParameter("Diversity Mode", "","Only for Multi-Ch-Models");
+		r.setAttribute("readonly" ,true);
+		r=dev.addStringParameter("High Density", "","");
 		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("FW Version", "","");
 		r.setAttribute("readonly" ,true);
@@ -63,6 +74,8 @@ function init() {
 		chan.addTrigger("Update", "Request all the Values from the Hardware !!" , false);				
 		var champs = util.getObjectProperties(contain);
 		for (var n = 0; n < champs.length; n++) {
+			if (contain[champs[n]][1] == "b") {
+			p=chan.addBoolParameter(contain[champs[n]][0], "",false);  }
 			if (contain[champs[n]][1] == "s") {
 			p=chan.addStringParameter(contain[champs[n]][0], "", ""); 
 			p.setAttribute("readonly" ,true);}			
@@ -70,19 +83,22 @@ function init() {
 			p=chan.addFloatParameter(contain[champs[n]][0], "", -115,-115,-1); 
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f2") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,-50,-1);
+			p=chan.addFloatParameter(contain[champs[n]][0], "", -50,-50,-1);
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f3") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,5); 
-			p.setAttribute("readonly" ,true);} }			
+			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,100); 
+			p.setAttribute("readonly" ,true);}
+			else if (contain[champs[n]][1] == "en") {			
 			p=chan.addEnumParameter("Battery Bars", "Battery Bars","unknown","255","5/5 full","5","4/5 bars","4","3/5 bars","3","2/5 bars","2","1/5 bars","1","0/5 alerte !", "0");
-			p.setAttribute("readonly" ,true);	
+			p.setAttribute("readonly" ,true);	} }
 			
 	var chan = local.values.addContainer("Channel 2");
 		chan.setCollapsed(true);
 		chan.addTrigger("Update", "Request all the Values from the Hardware !!" , false);				
 		var champs = util.getObjectProperties(contain);
 		for (var n = 0; n < champs.length; n++) {
+			if (contain[champs[n]][1] == "b") {
+			p=chan.addBoolParameter(contain[champs[n]][0], "",false);  }
 			if (contain[champs[n]][1] == "s") {
 			p=chan.addStringParameter(contain[champs[n]][0], "", ""); 
 			p.setAttribute("readonly" ,true);}			
@@ -90,19 +106,22 @@ function init() {
 			p=chan.addFloatParameter(contain[champs[n]][0], "", -115,-115,-1); 
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f2") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,-50,-1);
+			p=chan.addFloatParameter(contain[champs[n]][0], "", -50,-50,-1);
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f3") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,5); 
-			p.setAttribute("readonly" ,true);} }			
+			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,100); 
+			p.setAttribute("readonly" ,true);}
+			else if (contain[champs[n]][1] == "en") { 			
 			p=chan.addEnumParameter("Battery Bars", "Battery Bars","unknown","255","5/5 full","5","4/5 bars","4","3/5 bars","3","2/5 bars","2","1/5 bars","1","0/5 alerte !", "0");
-			p.setAttribute("readonly" ,true);	
+			p.setAttribute("readonly" ,true);	}  }
 			
 	var chan = local.values.addContainer("Channel 3");
 		chan.setCollapsed(true);
 		chan.addTrigger("Update", "Request all the Values from the Hardware !!" , false);				
 		var champs = util.getObjectProperties(contain);
 		for (var n = 0; n < champs.length; n++) {
+			if (contain[champs[n]][1] == "b") {
+			p=chan.addBoolParameter(contain[champs[n]][0], "",false);  }
 			if (contain[champs[n]][1] == "s") {
 			p=chan.addStringParameter(contain[champs[n]][0], "", ""); 
 			p.setAttribute("readonly" ,true);}			
@@ -110,19 +129,22 @@ function init() {
 			p=chan.addFloatParameter(contain[champs[n]][0], "", -115,-115,-1); 
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f2") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,-50,-1);
+			p=chan.addFloatParameter(contain[champs[n]][0], "", -50,-50,-1);
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f3") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,5); 
-			p.setAttribute("readonly" ,true);} }			
+			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,100); 
+			p.setAttribute("readonly" ,true);} 
+			else if (contain[champs[n]][1] == "en") {			
 			p=chan.addEnumParameter("Battery Bars", "Battery Bars","unknown","255","5/5 full","5","4/5 bars","4","3/5 bars","3","2/5 bars","2","1/5 bars","1","0/5 alerte !", "0");
-			p.setAttribute("readonly" ,true);	
+			p.setAttribute("readonly" ,true);	}  }
 			
 	var chan = local.values.addContainer("Channel 4");
 		chan.setCollapsed(true);
 		chan.addTrigger("Update", "Request all the Values from the Hardware !!" , false);				
 		var champs = util.getObjectProperties(contain);
 		for (var n = 0; n < champs.length; n++) {
+			if (contain[champs[n]][1] == "b") {
+			p=chan.addBoolParameter(contain[champs[n]][0], "",false); }
 			if (contain[champs[n]][1] == "s") {
 			p=chan.addStringParameter(contain[champs[n]][0], "", ""); 
 			p.setAttribute("readonly" ,true);}			
@@ -130,13 +152,14 @@ function init() {
 			p=chan.addFloatParameter(contain[champs[n]][0], "", -115,-115,-1); 
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f2") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,-50,-1);
+			p=chan.addFloatParameter(contain[champs[n]][0], "", -50,-50,-1);
 			p.setAttribute("readonly" ,true);}			
 			else if (contain[champs[n]][1] == "f3") {
-			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,5); 
-			p.setAttribute("readonly" ,true);} }			
+			p=chan.addFloatParameter(contain[champs[n]][0], "", 0,0,100); 
+			p.setAttribute("readonly" ,true);} 
+			else if (contain[champs[n]][1] == "en") {		
 			p=chan.addEnumParameter("Battery Bars", "Battery Bars","unknown","255","5/5 full","5","4/5 bars","4","3/5 bars","3","2/5 bars","2","1/5 bars","1","0/5 alerte !", "0");
-			p.setAttribute("readonly" ,true);	
+			p.setAttribute("readonly" ,true);	}	}
 			
 			
 			
@@ -164,6 +187,15 @@ function toInt(input) {
 
   return parseInt(res);
 }
+
+function setFlash(ch) {
+  if (typeof ch == "undefined" || ch == 0) {
+    local.send("< SET FLASH ON >");
+  } else if (ch == 1 || ch == 2 || ch == 3 || ch == 4) {
+    local.send("< SET " + ch + " FLASH ON >");
+  }
+}
+
 
 // =======================================
 //			DATA RECEIVED
@@ -204,10 +236,10 @@ function dataReceived(inputData) {
 // 				DEVICE INFOS 
 // =======================================
       if (parts[1] == "MODEL") {
-        local.values.device.modellName.set("QLXD");
+        local.values.device.modelName.set(string);
       }
       if (parts[1] == "DEVICE_ID") {
-        local.values.device.deviceID.set(string);
+        local.values.device.receiverID.set(string);
       }
       
       if (parts[1] == "MAC_ADDR") {
@@ -227,9 +259,9 @@ function dataReceived(inputData) {
       }
       if (parts[1] == "FLASH") {
         if (parts[2] == "ON") {
-          local.values.device.flashing.set(true);
+          local.values.device.flash.set(true);
         } else {
-          local.values.device.flashing.set(false);
+          local.values.device.flash.set(false);
         }
       }
 // =======================================
@@ -238,9 +270,9 @@ function dataReceived(inputData) {
 
       if (parts[2] == "FLASH") {
         if (parts[3] == "ON") {
-          local.values.getChild("channel" + parts[1]).flashing.set(true);
+          local.values.getChild("channel" + parts[1]).flash.set(true);
         } else {
-          local.values.getChild("channel" + parts[1]).flashing.set(false);
+          local.values.getChild("channel" + parts[1]).flash.set(false);
         }
       }
       if (parts[2] == "CHAN_NAME") {
@@ -270,7 +302,6 @@ function dataReceived(inputData) {
           parts[3] = parts[3].substring(1, parts[3].length);
           var val = parseInt(parts[3]) - 18 ;
           val = val+" db" ;
-        //root.modules.shureQLX_D.parameters.updateRateCh1
         local.values.getChild("channel" + parts[1]).audioGain.set(val);
       }
       if (parts[2] == "RX_RF_LVL") {
@@ -283,11 +314,13 @@ function dataReceived(inputData) {
       }
                
       if (parts[2] == "AUDIO_LVL") {
-      var parselvl = parseFloat(parts[3]);
-      var level = parselvl - 50 ;
-      var lvlstring = level+" dbFS" ;
-     	local.values.getChild("channel" + parts[1]).audioLevel.set(level+" dbFS");
-        local.values.getChild("channel" + parts[1]).audioPeak.set(level);
+      var parselvl = parseFloat(parts[3]) -50 ;
+//      var level = parselvl - 50 ;
+      if (parselvl <  -45) { var lvlstring = "NO SIGNAL!" ;}
+      else
+      {var lvlstring = parselvl+" dbFS" ;}
+     	local.values.getChild("channel" + parts[1]).audioLevel.set(lvlstring);
+        local.values.getChild("channel" + parts[1]).audioPeak.set(parselvl);
       }
            
       if (parts[2] == "TX_RF_PWR") {
@@ -299,11 +332,10 @@ function dataReceived(inputData) {
       	if (ant== "XX" || ant== "" ){ ant = "RF no antenna" ;}
       	if (ant== "AX"){ ant = "antenna A" ;}
       	if (ant== "XB"){ ant = "antenna B" ;}
+      	if (ant== "AB"){ ant = "antenna A & B" ;}
         local.values.getChild("channel" + parts[1]).antenna.set(ant);
       }
       if (parts[2] == "FREQUENCY") {
-        //root.modules.shureQLX_D.parameters.updateRateCh1
-        //root.modules.shureQLX_D.values.channel1.audioLevelRMS
         dec = parts[3].substring(parts[3].length - 3, parts[3].length);
         lead = parts[3].substring(0, parts[3].length - 3);
         local.values.getChild("channel" + parts[1]).frequency.set(lead + "." + dec);
@@ -314,14 +346,16 @@ function dataReceived(inputData) {
       }
       
        if (parts[2] == "BATT_TYPE") {
-        //root.modules.shureQLX_D.values.channel1.batteryBars
         local.values.getChild("channel" + parts[1]).batteryType.set(parts[3]);
       }
       if (parts[2] == "BATT_BARS") {
       var charge = parseFloat(parts[3]) ;
       if ( charge > 5){charge = 0 ;}
-        //root.modules.shureQLX_D.values.channel1.batteryBars
         local.values.getChild("channel" + parts[1]).batteryBars.setData(parseInt(parts[3]));
+      }
+      if (parts[2] == "BATT_CHARGE") {
+      var charge = parseFloat(parts[3]) ;
+      if ( charge > 5){charge = 0 ;}
         local.values.getChild("channel" + parts[1]).batteryCharge.set(charge);
       }
        if (parts[2] == "BATT_CYCLE") {
@@ -347,7 +381,6 @@ function dataReceived(inputData) {
         local.values.getChild("channel" + parts[1]).batteryRuntime.set(lbl);
       }
       if (parts[2] == "TX_BATT_MINS") {
-        //root.modules.shureQLX_D.values.channel1.batteryBars
         mins = parseInt(parts[3]);
         if (mins <= 65532) {
           hrs = Math.floor(mins / 60);
@@ -380,14 +413,14 @@ function dataReceived(inputData) {
         local.values.getChild("channel" + parts[1]).rfLevel.set(rfparse);
         
         //Audio Level Peak
-        var parselvl = parseFloat(parts[5]) ;
-		var level = parselvl - 50 ;
-        if (level >= -10)
-        {level = level+" dbFS - Clip!" ;}
-        else {level = level+" dbFS" ;}
+        var parselvl = parseFloat(parts[5]) -50;
+//		var level = parselvl - 50 ;
+		if (parselvl < -45)  {level = "NO SIGNAL!" ;}
+        else if (parselvl >= -10)  {level = parselvl+" dbFS - Clip!" ;}
+        else {level = parselvl+" dbFS" ;}
         var lvlstring = parselvl - 50 ;
         local.values.getChild("channel" + parts[1]).audioLevel.set(level);
-        local.values.getChild("channel" + parts[1]).audioPeak.set(lvlstring);
+        local.values.getChild("channel" + parts[1]).audioPeak.set(parselvl);
       }
     }
   }
@@ -399,14 +432,25 @@ function dataReceived(inputData) {
 
 
 function moduleParameterChanged(param) {
-  //script.log(param.name + " parameter changed, new value: " + param.get());
-  //root.modules.shureQLX_D.parameters.output.isConnected
-  if (param.name == "isConnected" && param.get() == 1) {
-    getAll();
-  }
-	  if (param.name == "updateRateCh1")
-	  var value = local.parameters.updateRateCh1.get() ; 
-	{local.send("< SET 1 METER_RATE " +value+ " >");}
+  		if (param.name == "isConnected" && param.get() == 1) {
+    	getAll();  }
+    	
+    	if (param.name == "reset") {
+    	local.parameters.updateRateCh1.set("no Updates");
+    	local.parameters.updateRateCh2.set("no Updates");
+    	local.parameters.updateRateCh3.set("no Updates");
+    	local.parameters.updateRateCh4.set("no Updates");
+    	}
+    	
+    	if (param.name == "updateRateCh1") {
+    	setMeterRate(1, param.get());  }	
+  		if (param.name == "updateRateCh2") {
+    	setMeterRate(2, param.get()); }
+    	if (param.name == "updateRateCh3") {
+    	setMeterRate(3, param.get());  }
+  		if (param.name == "updateRateCh4") {
+    	setMeterRate(4, param.get()); }
+
 }
 
 // =======================================
@@ -419,8 +463,8 @@ function moduleValueChanged(value) {
       local.send("< GET 1 ALL >");
     }
   if (value.getParent().name == "device") {
-    if (value.name == "flashing" && value.get() == 1) {
-      setFlashing(0);
+    if (value.name == "flash" && value.get() == 1) {
+      setFlash(0);
     }
     if (value.name == "deviceID") {
       setDeviceID(value.get());
@@ -428,8 +472,8 @@ function moduleValueChanged(value) {
   }
   if (value.getParent().name.substring(0, 7) == "channel") {
     channel = value.getParent().name.substring(7, 8);
-    if (value.name == "flashing" && value.get() == 1) {
-      setFlashing(channel);
+    if (value.name == "flash" && value.get() == 1) {
+      setFlash(channel);
     }
 
   }
@@ -502,10 +546,25 @@ function requests(string) {
 //  			 COMMANDS 
 // =======================================
 
-function setDeviceID(newid) {
-  local.send("< SET DEVICE_ID {" + newid + "} >");
+
+// >>>>>>>> RECEIVER ACTIONS
+function divSum(mode) {
+  local.send("< FREQUENCY_DIVERSITY_MODE " + mode + " >");
 }
 
+function audioSum(mode) {
+  local.send("< AUDIO_SUMMING_MODE " + mode + " >");
+}
+
+function highDens(mode) {
+  local.send("< SET HIGH_DENSITY " + mode + " >");
+}
+
+function setDeviceID(name) {
+  local.send("< SET DEVICE_ID {" + name + "} >");
+}
+
+// >>>>>>>> CHANNEL ACTIONS
 function sendLine(line) {
     local.send(line );
 }
@@ -517,12 +576,10 @@ function setChannelName(newName) {
 
 function setAudioGain(gain) {
     local.send("< SET " + ch + " AUDIO_GAIN " + (gain + 18) + " >");
-
 }
 
 function incAudioGain(addgain) {
     local.send("< SET " + ch + " AUDIO_GAIN INC " + addgain + " >");
-
 }
 
 function decAudioGain(addgain) {
@@ -530,10 +587,7 @@ function decAudioGain(addgain) {
 
 }
 
-function setMeterRate(rate) {
-  rate = toInt(rate);
-  //< SET x METER_RATE 01000 >
-  if ((ch == 1 || ch == 2) && ((rate >= 100 && rate <= 65535) || rate == 0)) {
+// >>>>>>>> DIVERS
+function setMeterRate(ch , rate) {
     local.send("< SET " + ch + " METER_RATE " + rate + " >");
-  }
 }

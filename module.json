@@ -37,6 +37,48 @@
             "very fast (0.2sec)": "00200",
             "fastest (0,1sec)": "00100"
       }
+    },
+	"Update Rate Ch 2": {
+      "type": "Enum",
+      "description": "Select the Update Rate for constantly changing infos (RF Signal Level, Audio Signal Level)",
+      "options": {
+       "no Updates": "00000",
+            "very slow (15sec)": "15000",
+            "slow (5sec)": "05000",
+            "medium (2,5sec)": "02500",
+            "fast (1sec)": "01000",
+            "faster (0,5sec)": "00500",
+            "very fast (0.2sec)": "00200",
+            "fastest (0,1sec)": "00100"
+      }
+    },
+    "Update Rate Ch 3": {
+      "type": "Enum",
+      "description": "Select the Update Rate for constantly changing infos (RF Signal Level, Audio Signal Level)",
+      "options": {
+       "no Updates": "00000",
+            "very slow (15sec)": "15000",
+            "slow (5sec)": "05000",
+            "medium (2,5sec)": "02500",
+            "fast (1sec)": "01000",
+            "faster (0,5sec)": "00500",
+            "very fast (0.2sec)": "00200",
+            "fastest (0,1sec)": "00100"
+      }
+    },
+    "Update Rate Ch 4": {
+      "type": "Enum",
+      "description": "Select the Update Rate for constantly changing infos (RF Signal Level, Audio Signal Level)",
+      "options": {
+       "no Updates": "00000",
+            "very slow (15sec)": "15000",
+            "slow (5sec)": "05000",
+            "medium (2,5sec)": "02500",
+            "fast (1sec)": "01000",
+            "faster (0,5sec)": "00500",
+            "very fast (0.2sec)": "00200",
+            "fastest (0,1sec)": "00100"
+      }
     }
   },
 
@@ -71,8 +113,54 @@
         }
       }
     },
+    
+    "set Diversity Summing": {
+      "menu": "ReceiverControls",
+      "callback": "diversitySum",
+      "parameters": {
+         "Diversity Summing": {
+		 "type": "Enum",
+          "options": {
+            "OFF": "OFF",
+            "Summing 1&2": "1+2",
+            "Summing 3&4": "3+4",
+            "Summing 1&2 / 3&4": "1+2/3+4" }
+        }
+      }
+    },
+    "set Audio Summing": {
+      "menu": "ReceiverControls",
+      "callback": "audioSum",
+      "parameters": {
+        "Audio Summing": {
+		 "type": "Enum",
+          "options": {
+            "OFF": "OFF",
+            "Summing 1&2": "1+2",
+            "Summing 3&4": "3+4",
+            "Summing 1&2 / 3&4": "1+2/3+4",
+            "Summing 1&23&4": "1+2+3+4"  }
+        }
+        
+        
+      }
+    },
+    "set High Density": {
+      "menu": "ReceiverControls",
+      "callback": "highDens",
+      "parameters": {
+        "High Density": {
+		 "type": "Enum",
+          "options": {
+            "OFF": "OFF",
+            "ON": "ON" }
+        }
+        
+        
+      }
+    },
     "set Device Name": {
-      "menu": "Controls",
+      "menu": "ReceiverControls",
       "callback": "setDeviceID",
       "parameters": {
         "Device Name": {
@@ -81,7 +169,7 @@
       }
     },
     "set Channel Name": {
-      "menu": "Controls",
+      "menu": "EmitterControls",
       "callback": "setChannelName",
       "parameters": {
         
@@ -91,7 +179,7 @@
       }
     },
     "set Audio Gain": {
-      "menu": "Controls",
+      "menu": "EmitterControls",
       "callback": "setAudioGain",
       "parameters": {
        
@@ -104,7 +192,7 @@
       }
     },
     "increase Audio Gain": {
-      "menu": "Controls",
+      "menu": "EmitterControls",
       "callback": "incAudioGain",
       "parameters": {
        
@@ -117,7 +205,7 @@
       }
     },
     "decrease Audio Gain": {
-      "menu": "Controls",
+      "menu": "EmitterControls",
       "callback": "decAudioGain",
       "parameters": {
        
@@ -137,7 +225,7 @@
       "menu": "Requests",
       "callback": "requests",
       "parameters": {
-        "Rate": {
+        "Request": {
           "type": "Enum",
           "options": {
             "get All": "< GET 0 ALL >",
