@@ -34,7 +34,7 @@ var contain = {
 	"battbars" : 	["Battery Bars", "en", "BATT_BARS"]};
 
 // =======================================
-//			FUNCTION INIT
+//	FUNCTION INIT
 // =======================================
 
 function init() {
@@ -50,7 +50,7 @@ function init() {
 
 	
 // =======================================
-//			CREATE CONTAINERS
+//	CREATE CONTAINERS
 // =======================================
 
   
@@ -183,7 +183,7 @@ function update(delta){
   }
   
 // =======================================
-//			HELPER
+//	HELPER
 // =======================================
 
 function toInt(input) {
@@ -212,7 +212,7 @@ function setFlash(ch) {
 
 
 // =======================================
-//			DATA RECEIVED
+//	DATA RECEIVED
 // =======================================
 
 function dataReceived(inputData) {
@@ -247,7 +247,7 @@ function dataReceived(inputData) {
       //script.log(parts[2]);
 
 // =======================================
-// 				DEVICE INFOS 
+// 	DEVICE INFOS 
 // =======================================
       if (parts[1] == "MODEL") {
         local.values.device.modelName.set(string);
@@ -280,7 +280,7 @@ function dataReceived(inputData) {
         }
       }
 // =======================================
-//			 CHANNEL INFOS 
+//	CHANNEL INFOS 
 // =======================================
 
       if (parts[2] == "FLASH") {
@@ -461,7 +461,7 @@ function dataReceived(inputData) {
 }
 
 // =======================================
-// 				PARAM CHANGE
+// 	PARAM CHANGE
 // =======================================
 
 
@@ -488,7 +488,7 @@ function moduleParameterChanged(param) {
 }
 
 // =======================================
-// 				 VALUE CHANGE 
+// 	 VALUE CHANGE 
 // =======================================
 
 function moduleValueChanged(value) {
@@ -514,7 +514,7 @@ function moduleValueChanged(value) {
 }
 
 // =======================================
-// 				 REQUESTS 
+// 	REQUESTS 
 // =======================================
 
 function requestModel() {
@@ -577,7 +577,7 @@ function requests(string) {
 
 
 // =======================================
-//  			 COMMANDS 
+//  	COMMANDS 
 // =======================================
 
 
