@@ -18,7 +18,7 @@
     "protocol": "Direct",
     "output": {
       "local": false,
-      "remoteHost" : "",
+      "remoteHost" : "192.168.50.78",
       "remotePort": 2202
     }
   },
@@ -132,7 +132,7 @@
       }
     },
     "Set Channel Name": {
-      "menu": "EmitterControls",
+      "menu": "TransmitterControls",
       "callback": "setChannelName",
       "parameters": {
         
@@ -142,7 +142,7 @@
       }
     },
     "Set Audio Gain": {
-      "menu": "EmitterControls",
+      "menu": "TransmitterControls",
       "callback": "setAudioGain",
       "parameters": {
        
@@ -155,7 +155,7 @@
       }
     },
     "Increase Audio Gain": {
-      "menu": "EmitterControls",
+      "menu": "TransmitterControls",
       "callback": "incAudioGain",
       "parameters": {
        
@@ -168,7 +168,7 @@
       }
     },
     "Decrease Audio Gain": {
-      "menu": "EmitterControls",
+      "menu": "TransmitterControls",
       "callback": "decAudioGain",
       "parameters": {
        
