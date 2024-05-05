@@ -36,7 +36,13 @@ function init() {
   		getAll();
   
 //------------------ Insert Parameters ------------------------
-  	Reset = local.parameters.addTrigger("Reset" , "Reset Update Rate Values" , false);
+  	reset = local.parameters.addTrigger("Reset" , "Reset Update Rate Values" , false);
+  	rCh1= local.parameters.addEnumParameter("Update Rate Ch 1", "Update Rate Ch 1","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");
+	rCh2= local.parameters.addEnumParameter("Update Rate Ch 2", "Update Rate Ch 2","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");
+	rCh3= local.parameters.addEnumParameter("Update Rate Ch 3", "Update Rate Ch 3","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");
+	rCh4= local.parameters.addEnumParameter("Update Rate Ch 4", "Update Rate Ch 4","no Updates","00000","very slow (15sec)","15000","slow (5sec)","05000","medium (2,5sec)","02500","fast (1sec)","01000","faster (0,5sec)","00500","very fast (0.2sec)","00200","fastest (0,1sec)","00100");
+
+	
 // =======================================
 //			CREATE CONTAINERS
 // =======================================
