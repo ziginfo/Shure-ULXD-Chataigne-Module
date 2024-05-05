@@ -313,7 +313,7 @@ function dataReceived(inputData) {
       }
       if (parts[2] == "AUDIO_GAIN") {
           parts[3] = parts[3].substring(1, parts[3].length);
-          var val = parseInt(parts[3]) - 18 ;
+          var val = parseFloat(parts[3]) - 18 ;
           val = val+" db" ;
         local.values.getChild("channel" + parts[1]).audioGain.set(val);
       }
@@ -602,20 +602,20 @@ function sendLine(line) {
     local.send(line );
 }
 
-function setChannelName(newName) {
+function setChannelName(ch,newName) {
     local.send(
       "< SET " + ch + " CHAN_NAME {" +newName+ "} >" );
 }
 
-function setAudioGain(gain) {
+function setAudioGain(ch,gain) {
     local.send("< SET " + ch + " AUDIO_GAIN " + (gain + 18) + " >");
 }
 
-function incAudioGain(addgain) {
+function incAudioGain(ch,addgain) {
     local.send("< SET " + ch + " AUDIO_GAIN INC " + addgain + " >");
 }
 
-function decAudioGain(addgain) {
+function decAudioGain(ch,addgain) {
 	local.send("< SET " + ch + " AUDIO_GAIN DEC " + addgain + " >");
 
 }
