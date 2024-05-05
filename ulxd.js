@@ -365,14 +365,21 @@ function dataReceived(inputData) {
         local.values.getChild("channel" + parts[1]).batteryCharge.set(charge);
       }
        if (parts[2] == "BATT_CYCLE") {
-      	var cycle = parseInt(parts[3]);
+      	var cycle = parseFloat(parts[3]);
       	 if (cycle == 65535) {
-          local.values.channel1.batteryCycles.set("SHOWN ONLY FOR SB900 !");}
+          local.values.getChild("channel" + parts[1]).batteryCycles.set("SHOWN ONLY FOR SB900 !");}
           else
-          {local.values.channel1.batteryCycles.set(""+cycle+"");}
+          {local.values.getChild("channel" + parts[1]).batteryCycles.set(""+cycle+" cycles");}
+      }
+      if (parts[2] == "BATT_HEALTH") {
+      	var health = parseFloat(parts[3]);
+      	 if (health == 255) {
+          local.values.getChild("channel" + parts[1]).batteryHealth.set("SHOWN ONLY FOR SB900 !");}
+          else
+          {local.values.getChild("channel" + parts[1]).batteryHealth.set(""+health+" %");}
       }
       if (parts[2] == "BATT_RUN_TIME") {
-        mins = parseInt(parts[3]);
+        mins = parseFloat(parts[3]);
         if (mins <= 65532) {
           hrs = Math.floor(mins / 60);
           min = mins - hrs * 60;
@@ -387,7 +394,7 @@ function dataReceived(inputData) {
         local.values.getChild("channel" + parts[1]).batteryRuntime.set(lbl);
       }
       if (parts[2] == "TX_BATT_MINS") {
-        mins = parseInt(parts[3]);
+        mins = parseFloat(parts[3]);
         if (mins <= 65532) {
           hrs = Math.floor(mins / 60);
           min = mins - hrs * 60;
