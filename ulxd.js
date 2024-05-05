@@ -320,9 +320,9 @@ function dataReceived(inputData) {
         local.values.getChild("channel" + parts[1]).audioGain.set(val);
       }
       if (parts[2] == "TX_OFFSET") {
-      var val = parseFloat(parts[3]) - 12 ;
-      if (val > 21) { val = "UNKN" ;}
-      else { val+" db" ;}
+      var val = parseFloat(parts[3])-12 ;
+		if (val > 21) { val = "NO TRANSMITTER" ;}
+		else {val = val+" db" ;}
         local.values.getChild("channel" + parts[1]).gainOffset.set(val);
       }
        if (parts[2] == "TX_MUTE_STATUS") {
