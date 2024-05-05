@@ -8,28 +8,30 @@ var channel_4_flashtime = 0;
 var todo = false;
 var string= "" ;
 var contain = {
-	"flash"	:	["Flash", "b", "FLASH"],
-	"name"	:	["Chan Name", "s", "CHAN_NAME"],
-	"trans" : 	["Transmitter", "s","TX_TYPE"],
-	"pwrlock" : ["Power Lock", "s","TX_PWR_LOCK"],
-	"menlock" : ["Menu Lock", "s","TX_MENU_LOCK"],
-	"gain" : 	["Audio Gain", "s","AUDIO_GAIN"],
-	"rfpower" : ["RF Power", "s","TX_RF_PWR"],
-	"frequ" : 	["Frequency", "s","FREQUENCY"],
-	"rfgroup" : ["RF Group", "s","GROUP_CHAN"],
-	"rfchann" : ["RF Channel", "s",""],
-	"antenna" : ["Antenna", "s","RF_ANTENNA"],
-	"rflvl" : 	["RF", "s", ""],
-	"rfgpeak" : ["RF Level", "f1", "RX_RF_LVL"],
-	"audiolvl" : ["Audio Level", "s", ""],
-	"audlvlpk" : ["Audio Peak", "f2", "AUDIO_LVL"],	
-	"encrypt" : ["Encryption Warn", "s", "ENCRYPTION_WARNING"],
-	"battcycle" : ["Battery Cycles", "s", "BATT_CYCLE"],
-	"batthealth" : ["Battery Health", "s", "BATT_HEALTH"],
-	"battrun" : ["Battery Runtime", "s", "BATT_RUN_TIME"],
-	"battype" : ["Battery Type", "s", "BATT_TYPE"],
-	"battcharge" : ["Battery Charge", "f3", "BATT_CHARGE"],
-	"battbars" : ["Battery Bars", "en", "BATT_BARS"]};
+	"flash"	:		["Flash", "b", "FLASH"],
+	"name"	:		["Chan Name", "s", "CHAN_NAME"],
+	"trans" : 		["Transmitter", "s","TX_TYPE"],
+	"pwrlock" : 	["Power Lock", "s","TX_PWR_LOCK"],
+	"menlock" : 	["Menu Lock", "s","TX_MENU_LOCK"],
+	"gain" : 		["Audio Gain", "s","AUDIO_GAIN"],
+	"txoffset" : 	["Gain Offset", "s","TX_OFFSET"],
+	"txmute" : 		["Mute", "s","TX_MUTE_STATUS "],
+	"rfpower" : 	["RF Power", "s","TX_RF_PWR"],
+	"frequ" : 		["Frequency", "s","FREQUENCY"],
+	"rfgroup" : 	["RF Group", "s","GROUP_CHAN"],
+	"rfchann" : 	["RF Channel", "s",""],
+	"antenna" : 	["Antenna", "s","RF_ANTENNA"],
+	"rflvl" : 		["RF", "s", ""],
+	"rfgpeak" : 	["RF Level", "f1", "RX_RF_LVL"],
+	"audiolvl" : 	["Audio Level", "s", ""],
+	"audlvlpk" : 	["Audio Peak", "f2", "AUDIO_LVL"],	
+	"encrypt" : 	["Encryption Warn", "s", "ENCRYPTION_WARNING"],
+	"battcycle" : 	["Battery Cycles", "s", "BATT_CYCLE"],
+	"batthealth" : 	["Battery Health", "s", "BATT_HEALTH"],
+	"battrun" : 	["Battery Runtime", "s", "BATT_RUN_TIME"],
+	"battype" : 	["Battery Type", "s", "BATT_TYPE"],
+	"battcharge" : 	["Battery Charge", "f3", "BATT_CHARGE"],
+	"battbars" : 	["Battery Bars", "en", "BATT_BARS"]};
 
 // =======================================
 //			FUNCTION INIT
@@ -317,6 +319,15 @@ function dataReceived(inputData) {
           val = val+" db" ;
         local.values.getChild("channel" + parts[1]).audioGain.set(val);
       }
+      if (parts[2] == "TX_OFFSET") {
+      var val = parseFloat(parts[3]) - 12 ;
+      if (val > 21) { val = "UNKN" ;}
+      else { val+" db" ;}
+        local.values.getChild("channel" + parts[1]).gainOffset.set(val);
+      }
+       if (parts[2] == "TX_MUTE_STATUS") {
+        local.values.getChild("channel" + parts[1]).mute.set(parts[3]);
+      }
       if (parts[2] == "RX_RF_LVL") {
       var rfparse = parseFloat(parts[3]) -115;
       	if (rfparse > -10) {rf = rfparse+" dBm - OverLoad!";}
@@ -324,11 +335,9 @@ function dataReceived(inputData) {
          else {rf = rfparse+" dBm";}
         local.values.getChild("channel" + parts[1]).rf.set(rf);
         local.values.getChild("channel" + parts[1]).rfLevel.set(rfparse);
-      }
-               
+      }               
       if (parts[2] == "AUDIO_LVL") {
       var parselvl = parseFloat(parts[3]) -50 ;
-//      var level = parselvl - 50 ;
       if (parselvl <  -45) { var lvlstring = "NO SIGNAL!" ;}
       else
       {var lvlstring = parselvl+" dbFS" ;}
