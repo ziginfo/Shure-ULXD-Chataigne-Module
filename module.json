@@ -18,7 +18,7 @@
     "protocol": "Direct",
     "output": {
       "local": false,
-      "remoteHost" : "",
+      "remoteHost" : "192.168.50.78",
       "remotePort": 2202
     }
   },
@@ -57,10 +57,18 @@
         }
       }
     },
-    
-    "set Diversity Summing": {
+    "Set Receiver Name": {
       "menu": "ReceiverControls",
-      "callback": "diversitySum",
+      "callback": "setDeviceID",
+      "parameters": {
+        "Set Device Name": {
+          "type": "String"
+        }
+      }
+    },
+    "Diversity Summing": {
+      "menu": "ReceiverControls",
+      "callback": "divSum",
       "parameters": {
          "Diversity Summing": {
 		 "type": "Enum",
@@ -72,7 +80,7 @@
         }
       }
     },
-    "set Audio Summing": {
+    "Audio Summing": {
       "menu": "ReceiverControls",
       "callback": "audioSum",
       "parameters": {
@@ -89,7 +97,7 @@
         
       }
     },
-    "set High Density": {
+    "High Density": {
       "menu": "ReceiverControls",
       "callback": "highDens",
       "parameters": {
@@ -98,36 +106,49 @@
           "options": {
             "OFF": "OFF",
             "ON": "ON" }
-        }
-        
-        
+        }   
       }
     },
-    "set Device Name": {
+     "Scan Lock": {
       "menu": "ReceiverControls",
-      "callback": "setDeviceID",
+      "callback": "scanLock",
       "parameters": {
-        "Device Name": {
-          "type": "String"
-        }
+        "Scan Lock": {
+		 "type": "Enum",
+          "options": {
+            "OFF": "OFF",
+            "ON": "ON" }
+        }   
       }
     },
-    "set Channel Name": {
+     "Sync Lock": {
+      "menu": "ReceiverControls",
+      "callback": "syncLock",
+      "parameters": {
+        "Scan Lock": {
+		 "type": "Enum",
+          "options": {
+            "OFF": "OFF",
+            "ON": "ON" }
+        }   
+      }
+    },
+    "Set Channel Name": {
       "menu": "EmitterControls",
       "callback": "setChannelName",
       "parameters": {
         
-        "new Name": {
+        "Set Channel Name": {
           "type": "String"
         }
       }
     },
-    "set Audio Gain": {
+    "Set Audio Gain": {
       "menu": "EmitterControls",
       "callback": "setAudioGain",
       "parameters": {
        
-        "Gain": {
+        "Set Gain": {
           "type": "Integer",
           "min": -18,
           "max": 42,
@@ -135,7 +156,7 @@
         }
       }
     },
-    "increase Audio Gain": {
+    "Increase Audio Gain": {
       "menu": "EmitterControls",
       "callback": "incAudioGain",
       "parameters": {
@@ -148,12 +169,12 @@
         }
       }
     },
-    "decrease Audio Gain": {
+    "Decrease Audio Gain": {
       "menu": "EmitterControls",
       "callback": "decAudioGain",
       "parameters": {
        
-        "Gain reduction": {
+        "Gain decrease": {
           "type": "Integer",
           "min": 0,
           "max": 10,
@@ -173,13 +194,13 @@
           "type": "Enum",
           "options": {
             "get All": "< GET 0 ALL >",
-            "get RF Level": "< GET 0 RX_RF_LVL >",
-            "get Audio Level": "< GET 0 AUDIO_LVL >",
-            "get Audio Gain": "< GET 0 AUDIO_GAIN >",
+            "get RF Levels": "< GET 0 RX_RF_LVL >",
+            "get Audio Levels": "< GET 0 AUDIO_LVL >",
+            "get Audio Gains": "< GET 0 AUDIO_GAIN >",
             "get Battery Bars": "< GET 0 TX_BATT_BARS >",
             "get Receiver Name": "< GET DEVICE_ID >",
-          	"get Transmitter Name": "< GET 0 TX_TYPE >",
-            "get Channel Name": "< GET 0 CHAN_NAME >",
+          	"get Transmitter Names": "< GET 0 TX_TYPE >",
+            "get Channel Names": "< GET 0 CHAN_NAME >",
             "get Firmware": "< GET FW_VER >",
             "get Frequency": "< GET 0 FREQUENCY >",
             "get Group&Channel": "< GET 0 GROUP_CHAN >"  }  }

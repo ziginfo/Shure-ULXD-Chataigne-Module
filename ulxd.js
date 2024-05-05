@@ -58,6 +58,8 @@ function init() {
 		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("MAC Address", "","");
 		r.setAttribute("readonly" ,true);
+		r=dev.addStringParameter("IP Address", "","");
+		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("RF Band", "","");
 		r.setAttribute("readonly" ,true);
 		r=dev.addStringParameter("Lock Status", "","");
@@ -248,8 +250,9 @@ function dataReceived(inputData) {
         local.values.device.receiverID.set(string);
       }
       
-      if (parts[1] == "MAC_ADDR") {
-        local.values.device.macAddress.set(parts[2]);
+      if (parts[1] == "NET_SETTINGS") {
+        local.values.device.macAddress.set(parts[7]);
+        local.values.device.ipAddress.set(parts[4]);
       }
       if (parts[1] == "FW_VER") {
         local.values.device.fwVersion.set(string);
@@ -345,6 +348,11 @@ function dataReceived(inputData) {
         dec = parts[3].substring(parts[3].length - 3, parts[3].length);
         lead = parts[3].substring(0, parts[3].length - 3);
         local.values.getChild("channel" + parts[1]).frequency.set(lead + "." + dec);
+         var band = "--" ;
+        if(lead >470 && lead< 534){ band = "G51" ;}
+        else if(lead >534 && lead< 598){ band = "H51" ;}
+        else if(lead >606 && lead< 670){ band = "K51" ;}
+        local.values.device.rfBand.set(band);
       }
       
       if (parts[2] == "ENCRYPTION_WARNING") {
@@ -571,6 +579,14 @@ function audioSum(mode) {
 
 function highDens(mode) {
   local.send("< SET HIGH_DENSITY " + mode + " >");
+}
+
+function scanLock(mode) {
+  local.send("< SCAN_LOCK " + mode + " >");
+}
+
+function syncLock(mode) {
+  local.send("< SYNC_LOCK " + mode + " >");
 }
 
 function setDeviceID(name) {
