@@ -6,7 +6,7 @@ Actual Version : V1.4
 
 This module is based on the SLXD-Module from [NiklasBerlin](https://github.com/niklasberlin/Shure-SLXD-Chataigne-module)
 
-I have two more Chataigne-Modules for other Shure Wireless-Systems (SLXD and ULXD) that you will find on my Github-Page :   
+I have two more Chataigne-Modules for other Shure Wireless-Systems (SLXD and QLXD) that you will find on my Github-Page :   
 https://github.com/ziginfo/Shure-SLXD-Chataigne-Module    
 https://github.com/ziginfo/Shure-QLXD-Chataigne-Module    
 
