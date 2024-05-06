@@ -1,4 +1,6 @@
-// =========== VARS ===========================
+// =======================================
+// 		VARS
+// =======================================
 var flashtime = 2.5; //time the flashing indicator stays lit
 var device_flashtime = 0;
 var channel_1_flashtime = 0;
@@ -23,8 +25,8 @@ var contain = {
 	"antenna" : 	["Antenna", "s","RF_ANTENNA"],
 	"rflvl" : 		["RF", "s", ""],
 	"rfgpeak" : 	["RF Level", "f1", "RX_RF_LVL"],
-	"audiolvl" : 	["Audio Level", "s", ""],
-	"audlvlpk" : 	["Audio Peak", "f2", "AUDIO_LVL"],	
+	"audiolvl" : 	["Audio", "s", ""],
+	"audlvlpk" : 	["Audio Level", "f2", "AUDIO_LVL"],	
 	"encrypt" : 	["Encryption Warn", "s", "ENCRYPTION_WARNING"],
 	"battcycle" : 	["Battery Cycles", "s", "BATT_CYCLE"],
 	"batthealth" : 	["Battery Health", "s", "BATT_HEALTH"],
@@ -34,7 +36,7 @@ var contain = {
 	"battbars" : 	["Battery Bars", "en", "BATT_BARS"]};
 
 // =======================================
-//	FUNCTION INIT
+//		FUNCTION INIT
 // =======================================
 
 function init() {
@@ -50,7 +52,7 @@ function init() {
 
 	
 // =======================================
-//	CREATE CONTAINERS
+//		CREATE CONTAINERS
 // =======================================
 
   
@@ -179,11 +181,46 @@ function init() {
 			
 }
 
-function update(delta){
+function update(delta) {
+  if (local.values.device.flash.get()) {
+    device_flashtime += 0.5;
+    if (device_flashtime >= flashtime) {
+      device_flashtime = 0;
+      local.values.device.flash.set(0);
+    }
   }
+  if (local.values.channel1.flash.get()) {
+    channel_1_flashtime += 0.5;
+    if (channel_1_flashtime >= flashtime) {
+      channel_1_flashtime = 0;
+      local.values.channel1.flash.set(0);
+    }
+  }
+  if (local.values.channel2.flash.get()) {
+    channel_2_flashtime += 0.5;
+    if (channel_2_flashtime >= flashtime) {
+      channel_2_flashtime = 0;
+      local.values.channel2.flash.set(0);
+    }
+  }
+  if (local.values.channel3.flash.get()) {
+    channel_3_flashtime += 0.5;
+    if (channel_3_flashtime >= flashtime) {
+      channel_3_flashtime = 0;
+      local.values.channel3.flash.set(0);
+    }
+  }
+  if (local.values.channel4.flash.get()) {
+    channel_4_flashtime += 0.5;
+    if (channel_4_flashtime >= flashtime) {
+      channel_4_flashtime = 0;
+      local.values.channel4.flash.set(0);
+    }
+  }
+}
   
 // =======================================
-//	HELPER
+//		HELPER
 // =======================================
 
 function toInt(input) {
@@ -212,7 +249,7 @@ function setFlash(ch) {
 
 
 // =======================================
-//	DATA RECEIVED
+//		DATA RECEIVED
 // =======================================
 
 function dataReceived(inputData) {
@@ -247,15 +284,14 @@ function dataReceived(inputData) {
       //script.log(parts[2]);
 
 // =======================================
-// 	DEVICE INFOS 
+// 		DEVICE INFOS 
 // =======================================
       if (parts[1] == "MODEL") {
         local.values.device.modelName.set(string);
       }
       if (parts[1] == "DEVICE_ID") {
         local.values.device.receiverID.set(string);
-      }
-      
+      }      
       if (parts[1] == "NET_SETTINGS") {
         local.values.device.macAddress.set(parts[7]);
         local.values.device.ipAddress.set(parts[4]);
@@ -280,7 +316,7 @@ function dataReceived(inputData) {
         }
       }
 // =======================================
-//	CHANNEL INFOS 
+//		CHANNEL INFOS 
 // =======================================
 
       if (parts[2] == "FLASH") {
@@ -321,7 +357,7 @@ function dataReceived(inputData) {
       }
       if (parts[2] == "TX_OFFSET") {
       var val = parseFloat(parts[3])-12 ;
-		if (val > 21) { val = "NO TRANSMITTER" ;}
+		if (val > 21) { val = "UNKN" ;}
 		else {val = val+" db" ;}
         local.values.getChild("channel" + parts[1]).gainOffset.set(val);
       }
@@ -341,8 +377,8 @@ function dataReceived(inputData) {
       if (parselvl <  -45) { var lvlstring = "NO SIGNAL!" ;}
       else
       {var lvlstring = parselvl+" dbFS" ;}
-     	local.values.getChild("channel" + parts[1]).audioLevel.set(lvlstring);
-        local.values.getChild("channel" + parts[1]).audioPeak.set(parselvl);
+     	local.values.getChild("channel" + parts[1]).audio.set(lvlstring);
+        local.values.getChild("channel" + parts[1]).audioLevel.set(parselvl);
       }
            
       if (parts[2] == "TX_RF_PWR") {
@@ -453,15 +489,15 @@ function dataReceived(inputData) {
         else if (parselvl >= -10)  {level = parselvl+" dbFS - Clip!" ;}
         else {level = parselvl+" dbFS" ;}
         var lvlstring = parselvl - 50 ;
-        local.values.getChild("channel" + parts[1]).audioLevel.set(level);
-        local.values.getChild("channel" + parts[1]).audioPeak.set(parselvl);
+        local.values.getChild("channel" + parts[1]).audio.set(level);
+        local.values.getChild("channel" + parts[1]).audioLevel.set(parselvl);
       }
     }
   }
 }
 
 // =======================================
-// 	PARAM CHANGE
+// 		PARAM CHANGE
 // =======================================
 
 
@@ -488,13 +524,13 @@ function moduleParameterChanged(param) {
 }
 
 // =======================================
-// 	 VALUE CHANGE 
+// 		VALUE CHANGE 
 // =======================================
 
 function moduleValueChanged(value) {
   
   if (value.name == "update") {
-      local.send("< GET 1 ALL >");
+      local.send("< GET 0 ALL >");
     }
   if (value.getParent().name == "device") {
     if (value.name == "flash" && value.get() == 1) {
@@ -514,7 +550,7 @@ function moduleValueChanged(value) {
 }
 
 // =======================================
-// 	REQUESTS 
+// 		REQUESTS 
 // =======================================
 
 function requestModel() {
